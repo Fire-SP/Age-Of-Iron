@@ -2,25 +2,27 @@ import pygame
 from noise import pnoise2
 from random import randint
 pygame.init()
-screen = pygame.display.set_mode((400, 400))
 done = False
 
 
 # Important Variables
-winWidth = 1000
-winHeight = 1000
+winWidth = 1280
+winHeight = 720
+screen = pygame.display.set_mode((winWidth, winHeight))
 
-MX = 200 # Max X
-MY = 200 # Max Y
+global mult
+MaxX = 200 # Max X
+MaxY = 200 # Max Y
+size = MaxX * MaxY
 tileSize = 5
-focusSize = 8
+focusSize = 5
 
 focusX = 0
 focusY = 0
 
 land = []
 
-gridSize = 1
+gridSize = 0
 
 # Constants
 WATER = 0
@@ -34,11 +36,11 @@ LABELS = ["Water", "Sand", "Grass", "Forrest", "Mountain"]
 
 # Helper functions
 def doubleToSingle(x, y):
-    return (MX * y) + x
+    return (MaxX * y) + x
 
 def singleToDouble(i):
-    x = i % MX
-    y = int(i / MY)
+    x = i % MaxX
+    y = int(i / MaxY)
     return (x, y)
 
 
@@ -50,10 +52,10 @@ class Tile():
 
 def init():
     # Init the land
-    mult = 0.01
+    mult = 0.03
     offX = randint(-5000000, 5000000)
     offY = randint(-5000000, 5000000)
-    for i in range(MX*MY):
+    for i in range(MaxX*MaxY):
         X, Y = singleToDouble(i)
         noise = pnoise2((X + offX)*mult, (Y + offY)*mult)
         val = (noise+1)*50
@@ -73,27 +75,16 @@ def init():
         land.append(Tile(TYPE))
 
 
-def gameLoop():
-    mouseX, mouseY = pygame.mouse.get_pos()
 
-    focusX = int(mouseX / 20)
-    focusY = int(mouseY / 20)
-    print(focusX, focusY)
-
-    pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
-    renderLand()
-    pygame.display.update()
+    
 
 def renderLand():
 
-    for i in range(MX*MY):
+    for i in range(MaxX*MaxY):
         X, Y = singleToDouble(i)
         tile = land[i]
         focusIndex = doubleToSingle(focusX, focusY)
-        if focusIndex == i:
-            pygame.draw.rect(screen, tile.color, (X*tileSize + ((tileSize-focusSize)/2), Y*tileSize + ((tileSize-focusSize)/2), focusSize, focusSize))
-        else:
-            pygame.draw.rect(screen, tile.color, (X*tileSize, Y*tileSize, tileSize-gridSize, tileSize-gridSize))
+        pygame.draw.rect(screen, tile.color, (X*tileSize, Y*tileSize, tileSize-gridSize, tileSize-gridSize))
 
 
 init()
@@ -103,4 +94,12 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-    gameLoop()
+    mouseX, mouseY = pygame.mouse.get_pos()
+
+    focusX = int(mouseX / 20)
+    focusY = int(mouseY / 20)
+    print(focusX, focusY)
+
+    #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
+    renderLand()
+    pygame.display.update()
