@@ -49,15 +49,27 @@ class Tile():
         self.type = type
         self.color = COLORS[self.type]
         self.label = LABELS[self.type]
+        self.hasCopper = False
+        self.hasTin = False
+        self.hasIron = False
 
 def init():
     # Init the land
     mult = 0.03
     offX = randint(-5000000, 5000000)
     offY = randint(-5000000, 5000000)
+    CopperX = randint(-5000, 5000)
+    CopperY = randint(-5000, 5000)
+    TinX = randint(-5000, 5000)
+    TinY = randint(-5000, 5000)
+    IronX = randint(-5000, 5000)
+    IronY = randint(-5000, 5000)
     for i in range(MaxX*MaxY):
         X, Y = singleToDouble(i)
         noise = pnoise2((X + offX)*mult, (Y + offY)*mult)
+        Coppernoise = pnoise2((X +CopperX)*mult,(Y + CopperY)* mult)
+        Tinnoise = pnoise2((X +CopperX)*mult,(Y + CopperY)* mult)
+        Ironnoise = pnoise2((X +CopperX)*mult,(Y + CopperY)* mult)
         val = (noise+1)*50
         TYPE = 0
 
