@@ -9,14 +9,15 @@ done = False
 # Important Variables
 winWidth = 1280
 winHeight = 720
+clock = pygame.time.Clock()
 screen = pygame.display.set_mode((winWidth, winHeight))
 
 global mult
-MaxX = 200 # Max X
-MaxY = 200 # Max Y
+MaxX = 100 # Max X
+MaxY = 100 # Max Y
 size = MaxX * MaxY
-tileSize = 5
-focusSize = 5
+tileSize = 10
+focusSize = 10
 
 focusX = 0
 focusY = 0
@@ -57,7 +58,7 @@ class Tile():
 
 def init():
     # Init the land
-    mult = 0.03
+    mult = 0.06
     oremult = 0.5
     offX = randint(-5000000, 5000000)
     offY = randint(-5000000, 5000000)
@@ -121,4 +122,5 @@ while not done:
 
     #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
     renderLand()
+    clock.tick(60)
     pygame.display.update()
