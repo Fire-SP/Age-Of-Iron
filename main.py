@@ -6,6 +6,7 @@ pygame.init()
 pygame.font.init()
 done = False
 
+pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
 
 # Important Variables
 winWidth = 1280
@@ -43,7 +44,7 @@ MOUNTAIN = 4
 COLORS = [(46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
 LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
 
-SelectImage = pygame.image.load("SelectionCursor.png")
+SelectImage = pygame.image.load("img/Selection.png")
 
 # Helper functions
 def doubleToSingle(x, y):
@@ -115,18 +116,18 @@ class GUI(): # Draws GUI, Very simple right now
         player.PrintResource()
 
     def RightClick():
-        
+
         mouseX, mouseY = pygame.mouse.get_pos()
         OnScreenRender()
         pygame.draw.rect(screen,(100,100,100),(int(mouseX),int(mouseY),30,50))
         pygame.draw.rect(screen,(255,50,50),(int(mouseX)+25,int(mouseY),5,5))
-        
+
         #This Is Broken
 
 class player():
     def __init__():
         print("")
-        
+
 
     def PrintResource():
         I = inventory
@@ -154,7 +155,7 @@ def OnScreenRender():
     YText = font.render('Y : ' + str(int(mouseY / 10 )),True,(255,255,255)) # Writes Y Position in tile Form
     focusX = int(mouseX / 10)
     focusY = int(mouseY / 10)
-    print(oreGEN[mouseX + mouseY])
+    #print(oreGEN[mouseX + mouseY])
     screen.blit(XText,(1220,10))
     screen.blit(YText,(1220,30))
     for event in pygame.event.get():
@@ -163,24 +164,21 @@ def OnScreenRender():
             pygame.quit()
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print (event.button)
+            #print (event.button)
             if event.button == 3:
                 clicked = True
                 GUI.RightClick()
 
     #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
     renderLand()
-    clock.tick(60)
+    clock.tick(10000)
     screen.blit(SelectImage,(X *10,Y *10))
     pygame.display.update()
-    
+
 init()
 player.__init__()
 screen = pygame.display.set_mode((winWidth, winHeight))
 done = False
-while not done:
-                             
-    OnScreenRender()
-                
-    
 
+while not done:
+    OnScreenRender()
