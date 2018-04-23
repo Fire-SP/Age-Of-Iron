@@ -13,6 +13,7 @@ winHeight = 720
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((winWidth, winHeight))
 font = pygame.font.SysFont('Times New Roman MS',30)
+test = pygame.image.load("IMAGE.png")
 
 global mult
 MaxX = 100 # Max X
@@ -26,9 +27,10 @@ clicked = False
 
 inventory = [100,100,100,0,0,0]
 #           Wood,Stone,Food,Copper,Tin,Iron
-
 focusX = 0
 focusY = 0
+
+
 
 
 land = []
@@ -125,7 +127,6 @@ class GUI(): # Draws GUI, Very simple right now
         while clicked == True:
             OnScreenRender()
             pygame.draw.rect(screen,(100,100,100),(int(OldX),int(OldY),150,300))
-            pygame.draw.rect(screen,(255,50,50),(int(OldX)+135,int(OldY),15,15))
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -136,10 +137,7 @@ class GUI(): # Draws GUI, Very simple right now
         
         #This Is Broken
 
-class player():
-    def __init__():
-        print("")
-        
+class player():        
 
     def PrintResource():
         I = inventory
@@ -157,9 +155,27 @@ class player():
         screen.blit(TinText,(1015,90))
         screen.blit(IronText,(1015,110))
 
+def placeBuilding():
+    mouseX, mouseY = pygame.mouse.get_pos()
+    X = int(mouseX/10)
+    Y = int(mouseY/10)
+
+    CityCap = 0
+    #Try to Place City Center
+    if CityCap < 1:
+        print("City Cap Passed. ")
+        if inventory[0] > 75 and inventory[1] > 50 and inventory[2] > 50:
+            print("Resource Check Passed. ")
+            I = inventory
+            I[0] -= 75
+            I[1] -= 50
+            I[2] -= 50
+        
+
 def OnScreenRender():
     screen.fill((0,0,0))
     GUI.Render()
+    #Init Mouse Location
     mouseX, mouseY = pygame.mouse.get_pos()
     X = int(mouseX/10)
     Y = int(mouseY/10)
@@ -181,15 +197,16 @@ def OnScreenRender():
                 global clicked
                 clicked = True
                 GUI.RightClick()
+            if event.button == 2:
+                placeBuilding()
 
     #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
     renderLand()
+    #screen.blit(test,(0,0))
     clock.tick(60)
     screen.blit(SelectImage,(X *10,Y *10))
     
 init()
-#p = player()
-#p.__init__()
 screen = pygame.display.set_mode((winWidth, winHeight))
 done = False
 while not done:
