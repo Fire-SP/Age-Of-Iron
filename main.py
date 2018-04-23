@@ -6,7 +6,6 @@ pygame.init()
 pygame.font.init()
 done = False
 
-pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
 
 # Important Variables
 winWidth = 1280
@@ -21,6 +20,8 @@ MaxY = 100 # Max Y
 size = MaxX * MaxY
 tileSize = 10
 focusSize = 10
+global clicked
+clicked = False
 
 inventory = [100,100,100,0,0,0]
 #           Wood,Stone,Food,Copper,Tin,Iron
@@ -44,7 +45,7 @@ MOUNTAIN = 4
 COLORS = [(46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
 LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
 
-SelectImage = pygame.image.load("img/Selection.png")
+SelectImage = pygame.image.load("SelectionCursor.png")
 
 # Helper functions
 def doubleToSingle(x, y):
@@ -116,18 +117,22 @@ class GUI(): # Draws GUI, Very simple right now
         player.PrintResource()
 
     def RightClick():
-
         mouseX, mouseY = pygame.mouse.get_pos()
-        OnScreenRender()
-        pygame.draw.rect(screen,(100,100,100),(int(mouseX),int(mouseY),30,50))
-        pygame.draw.rect(screen,(255,50,50),(int(mouseX)+25,int(mouseY),5,5))
-
+        OldX = mouseX
+        OldY = mouseY
+        while clicked == True:
+            OnScreenRender()
+            pygame.draw.rect(screen,(100,100,100),(int(OldX),int(OldY),150,300))
+            pygame.draw.rect(screen,(255,50,50),(int(OldX)+135,int(OldY),15,15))
+            pygame.display.update()
+    
+        
         #This Is Broken
 
 class player():
     def __init__():
         print("")
-
+        
 
     def PrintResource():
         I = inventory
@@ -164,21 +169,25 @@ def OnScreenRender():
             pygame.quit()
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            #print (event.button)
+            print (event.button)
             if event.button == 3:
+                global clicked
                 clicked = True
                 GUI.RightClick()
 
     #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
     renderLand()
-    clock.tick(10000)
+    clock.tick(60)
     screen.blit(SelectImage,(X *10,Y *10))
-    pygame.display.update()
-
+    
 init()
 player.__init__()
 screen = pygame.display.set_mode((winWidth, winHeight))
 done = False
-
 while not done:
+                             
     OnScreenRender()
+    pygame.display.update()
+    
+                
+    
