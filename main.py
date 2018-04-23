@@ -20,6 +20,7 @@ MaxY = 100 # Max Y
 size = MaxX * MaxY
 tileSize = 10
 focusSize = 10
+
 global clicked
 clicked = False
 
@@ -117,6 +118,7 @@ class GUI(): # Draws GUI, Very simple right now
         player.PrintResource()
 
     def RightClick():
+        clicked = True
         mouseX, mouseY = pygame.mouse.get_pos()
         OldX = mouseX
         OldY = mouseY
@@ -125,6 +127,11 @@ class GUI(): # Draws GUI, Very simple right now
             pygame.draw.rect(screen,(100,100,100),(int(OldX),int(OldY),150,300))
             pygame.draw.rect(screen,(255,50,50),(int(OldX)+135,int(OldY),15,15))
             pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 3:
+                        clicked = False
     
         
         #This Is Broken
@@ -181,7 +188,8 @@ def OnScreenRender():
     screen.blit(SelectImage,(X *10,Y *10))
     
 init()
-player.__init__()
+#p = player()
+#p.__init__()
 screen = pygame.display.set_mode((winWidth, winHeight))
 done = False
 while not done:
