@@ -55,12 +55,16 @@ landImg = pygame.image.load("img/Selection.png")
 def createImage():
     global landImg
     img = Image.new('RGB', (1000, 1000), "black")
-    draw = ImageDraw.Draw(img)
     pixels = img.load()
 
-    for i in range(1000*720):
-        x, y = singleToDouble(int(i/10))
-        pixels[x, y] = land[int(i/10)].color
+    for i in range(100):
+        for j in range(72):
+            landIndex = doubleToSingle(i, j)
+            for k in range(10):
+                for l in range(10):
+                    pixels[i*10+k, j*10+l] = land[landIndex].color
+            #pixels[i*10,j*10] = land[landIndex].color
+        # pixels[imgX,imgY] = land[landIndex].color
     img.save("img/Land.png", "PNG")
     landImg = pygame.image.load("img/Land.png")
 
