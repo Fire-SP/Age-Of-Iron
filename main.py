@@ -2,7 +2,7 @@ import pygame
 import time
 from noise import pnoise2
 from random import randint
-from PIL import Image
+from PIL import Image, ImageDraw
 pygame.init()
 pygame.font.init()
 done = False
@@ -54,11 +54,13 @@ landImg = pygame.image.load("img/Selection.png")
 # Helper functions
 def createImage():
     global landImg
-    img = Image.new('RGB', (1000, 720), "black")
+    img = Image.new('RGB', (1000, 1000), "black")
+    draw = ImageDraw.Draw(img)
     pixels = img.load()
 
-    for i in range(maxX * maxY):
-        pixels[i, 0] = land[i].color
+    for i in range(1000*720):
+        x, y = singleToDouble(int(i/10))
+        pixels[x, y] = land[int(i/10)].color
     img.save("img/Land.png", "PNG")
     landImg = pygame.image.load("img/Land.png")
 
