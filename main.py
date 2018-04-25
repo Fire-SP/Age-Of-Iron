@@ -2,6 +2,7 @@ import pygame
 import time
 from noise import pnoise2
 from random import randint
+from PIL import Image, ImageDraw
 pygame.init()
 pygame.font.init()
 done = False
@@ -13,7 +14,7 @@ winHeight = 720
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((winWidth, winHeight))
 font = pygame.font.SysFont('Times New Roman MS',30)
-test = pygame.image.load("IMAGE.png")
+# test = pygame.image.load("IMAGE.png")
 
 global mult
 MaxX = 100 # Max X
@@ -48,9 +49,26 @@ MOUNTAIN = 4
 COLORS = [(46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
 LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
 
-SelectImage = pygame.image.load("SelectionCursor.png")
-
+SelectImage = pygame.image.load("img/Selection.png")
+landImg = pygame.image.load("img/Selection.png")
 # Helper functions
+def createImage():
+    global landImg
+    img = Image.new('RGB', (1000, 1000), "black")
+    pixels = img.load()
+
+    for i in range(100):
+        for j in range(72):
+            landIndex = doubleToSingle(i, j)
+            for k in range(10):
+                for l in range(10):
+                    pixels[i*10+k, j*10+l] = land[landIndex].color
+            #pixels[i*10,j*10] = land[landIndex].color
+        # pixels[imgX,imgY] = land[landIndex].color
+    img.save("img/Land.png", "PNG")
+    landImg = pygame.image.load("img/Land.png")
+
+
 def doubleToSingle(x, y):
     return (MaxX * y) + x
 
@@ -133,11 +151,11 @@ class GUI(): # Draws GUI, Very simple right now
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 3:
                         clicked = False
-    
-        
+
+
         #This Is Broken
 
-class player():        
+class player():
 
     def PrintResource():
         I = inventory
@@ -170,7 +188,6 @@ def placeBuilding():
             I[0] -= 75
             I[1] -= 50
             I[2] -= 50
-        
 
 def OnScreenRender():
     screen.fill((0,0,0))
@@ -179,13 +196,8 @@ def OnScreenRender():
     mouseX, mouseY = pygame.mouse.get_pos()
     X = int(mouseX/10)
     Y = int(mouseY/10)
-    XText = font.render('X : ' + str(int(mouseX / 10 )),True,(255,255,255)) # Writes X Position in tile Form
-    YText = font.render('Y : ' + str(int(mouseY / 10 )),True,(255,255,255)) # Writes Y Position in tile Form
-    focusX = int(mouseX / 10)
-    focusY = int(mouseY / 10)
+
     #print(oreGEN[mouseX + mouseY])
-    screen.blit(XText,(1220,10))
-    screen.blit(YText,(1220,30))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -201,18 +213,26 @@ def OnScreenRender():
                 placeBuilding()
 
     #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
-    renderLand()
-    #screen.blit(test,(0,0))
+    #renderLand()
+
+    screen.blit(landImg,(0,0))
     clock.tick(60)
     screen.blit(SelectImage,(X *10,Y *10))
-    
+
+    ################## SIDE BAR STUFF #############################
+    posText = font.render('['+str(X)+','+str(Y)+']',True,(255,255,255))
+    screen.blit(posText,(1200,10))
+
+    # Show land type
+    landIndex = doubleToSingle(X, Y)
+    landType = font.render(land[landIndex].label, True, (255, 255, 255))
+    screen.blit(landType, (1100, 200))
+
 init()
+createImage()
 screen = pygame.display.set_mode((winWidth, winHeight))
 done = False
 while not done:
-                             
+
     OnScreenRender()
     pygame.display.update()
-    
-                
-    
