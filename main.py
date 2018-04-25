@@ -189,7 +189,6 @@ def placeBuilding():
             I[1] -= 50
             I[2] -= 50
 
-
 def OnScreenRender():
     screen.fill((0,0,0))
     GUI.Render()
@@ -197,13 +196,8 @@ def OnScreenRender():
     mouseX, mouseY = pygame.mouse.get_pos()
     X = int(mouseX/10)
     Y = int(mouseY/10)
-    XText = font.render('X : ' + str(int(mouseX / 10 )),True,(255,255,255)) # Writes X Position in tile Form
-    YText = font.render('Y : ' + str(int(mouseY / 10 )),True,(255,255,255)) # Writes Y Position in tile Form
-    focusX = int(mouseX / 10)
-    focusY = int(mouseY / 10)
+
     #print(oreGEN[mouseX + mouseY])
-    screen.blit(XText,(1220,10))
-    screen.blit(YText,(1220,30))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -220,9 +214,19 @@ def OnScreenRender():
 
     #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
     #renderLand()
+
     screen.blit(landImg,(0,0))
     clock.tick(60)
     screen.blit(SelectImage,(X *10,Y *10))
+
+    ################## SIDE BAR STUFF #############################
+    posText = font.render('['+str(X)+','+str(Y)+']',True,(255,255,255))
+    screen.blit(posText,(1200,10))
+
+    # Show land type
+    landIndex = doubleToSingle(X, Y)
+    landType = font.render(land[landIndex].label, True, (255, 255, 255))
+    screen.blit(landType, (1100, 200))
 
 init()
 createImage()
