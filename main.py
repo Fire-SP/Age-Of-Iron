@@ -41,14 +41,15 @@ oreGEN = []
 showGrid = True
 
 # Constants
-WATER = 0
-SAND = 1
-GRASS = 2
-FOREST = 3
-MOUNTAIN = 4
+DEEP = 0
+WATER = 1
+SAND = 2
+GRASS = 3
+FOREST = 4
+MOUNTAIN = 5
 
-COLORS = [(46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
-LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
+COLORS = [(	0, 119, 190), (46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
+LABELS = ["Deepwater", "Water", "Sand", "Grass", "Forest", "Mountain"]
 
 SelectImage = pygame.image.load("img/Cursor2.png")
 landImg = pygame.image.load("img/Selection.png")
@@ -57,16 +58,6 @@ def createImage():
     global landImg
     img = Image.new('RGB', (1000, 720), (0, 0, 0))
     pixels = img.load()
-    '''
-    for i in range(100):
-        for j in range(72):
-            landIndex = doubleToSingle(i, j)
-            for k in range(10):
-                for l in range(10):
-                    pixels[i*10+k, j*10+l] = land[landIndex].color
-            #pixels[i*10,j*10] = land[landIndex].color
-        # pixels[imgX,imgY] = land[landIndex].color
-    '''
     mult = 0.006
     for i in range(1000):
         for j in range(720):
@@ -105,8 +96,10 @@ def getNoiseType(noiseVal):
         TYPE = GRASS
     elif noiseVal > 35:
         TYPE = SAND
-    else:
+    elif noiseVal > 28:
         TYPE = WATER
+    else:
+        TYPE = DEEP
     return TYPE
 
 def init():
