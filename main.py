@@ -21,14 +21,21 @@ font = pygame.font.SysFont('Times New Roman MS',30)
 # test = pygame.image.load("IMAGE.png")
 
 global mult
-MaxX = 100 # Max X
-MaxY = 100 # Max Y
+MaxX = 130 # Max X
+MaxY = 130 # Max Y
 size = MaxX * MaxY
 tileSize = 10
 focusSize = 10
 
 global clicked
 clicked = False
+
+wood = 100
+stone = 100
+food = 100
+metal = 0
+pop = 1
+gold = 0
 
 inventory = [100,100,100,0,0,0]
 #           Wood,Stone,Food,Copper,Tin,Iron
@@ -52,6 +59,10 @@ LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
 
 SelectImage = pygame.image.load("img/Cursor2.png")
 landImg = pygame.image.load("img/Selection.png")
+
+# Resources
+
+
 # Helper functions
 def createImage():
     global landImg
@@ -134,7 +145,6 @@ def init():
 
 
 def renderLand():
-
     for i in range(MaxX*MaxY):
         X, Y = singleToDouble(i)
         tile = land[i]
@@ -144,6 +154,19 @@ def renderLand():
 class GUI(): # Draws GUI, Very simple right now
     def Render():
         pygame.draw.rect(screen, (100,100,100), (0, 0, 1280, 40))
+        woodText = font.render('Wood: ' + str(wood),True,(255,255,255))
+        stoneText = font.render('Stone: ' + str(stone),True,(255,255,255))
+        foodText = font.render('Food: ' + str(food),True,(255,255,255))
+        metalText = font.render('Metal: ' + str(metal),True,(255,255,255))
+        popText = font.render('Population: ' + str(pop),True,(255,255,255))
+        goldText = font.render('Gold: ' + str(gold),True,(255,255,255))
+
+        screen.blit(woodText, (20, 12))
+        screen.blit(stoneText, (200, 12))
+        screen.blit(foodText, (400, 12))
+        screen.blit(metalText, (600, 12))
+        screen.blit(popText, (800, 12))
+        screen.blit(goldText, (1000, 12))
 
     def RightClick():
         clicked = True
@@ -161,41 +184,11 @@ class GUI(): # Draws GUI, Very simple right now
                         clicked = False
 
 
-        #This Is Broken
-
-class player():
-
-    def PrintResource():
-        I = inventory
-        WoodText = font.render('Wood : ' + str(int(I[0] )),True,(255,255,255))
-        StoneText = font.render('Stone : ' + str(int(I[1])),True,(255,255,255))
-        FoodText = font.render('Food : ' + str(int(I[2] )),True,(255,255,255))
-        CopperText = font.render('Copper : ' + str(int(I[3] )),True,(255,255,255))
-        TinText = font.render('Tin : ' + str(int(I[4] )),True,(255,255,255))
-        IronText = font.render('Iron : ' + str(int(I[5])),True,(255,255,255))
-        #actually printing...
-        screen.blit(WoodText,(1015,10))
-        screen.blit(StoneText,(1015,30))
-        screen.blit(FoodText,(1015,50))
-        screen.blit(CopperText,(1015,70))
-        screen.blit(TinText,(1015,90))
-        screen.blit(IronText,(1015,110))
 
 def placeBuilding():
     mouseX, mouseY = pygame.mouse.get_pos()
     X = int(mouseX/10)
     Y = int(mouseY/10)
-
-    CityCap = 0
-    #Try to Place City Center
-    if CityCap < 1:
-        print("City Cap Passed. ")
-        if inventory[0] > 75 and inventory[1] > 50 and inventory[2] > 50:
-            print("Resource Check Passed. ")
-            I = inventory
-            I[0] -= 75
-            I[1] -= 50
-            I[2] -= 50
 
 def OnScreenRender():
     screen.fill((0,0,0))
@@ -233,8 +226,8 @@ def OnScreenRender():
 
     # Show land type
     landIndex = doubleToSingle(X, Y)
-    landType = pygame.image.load("img/tiles/" + land[landIndex].label + ".png")
-    screen.blit(landType, (1100, 200))
+    # landType = pygame.image.load("img/tiles/" + land[landIndex].label + ".png")
+    # screen.blit(landType, (1100, 200))
 
 init()
 createImage()
