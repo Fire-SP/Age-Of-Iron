@@ -38,7 +38,7 @@ focusY = 0
 land = []
 oreGEN = []
 
-showGrid = True
+showGrid = False
 
 # Constants
 WATER = 0
@@ -55,7 +55,7 @@ landImg = pygame.image.load("img/Selection.png")
 # Helper functions
 def createImage():
     global landImg
-    img = Image.new('RGB', (1000, 720), (0, 0, 0))
+    img = Image.new('RGB', (1280, 720), (0, 0, 0))
     pixels = img.load()
     '''
     for i in range(100):
@@ -68,7 +68,7 @@ def createImage():
         # pixels[imgX,imgY] = land[landIndex].color
     '''
     mult = 0.006
-    for i in range(1000):
+    for i in range(1280):
         for j in range(720):
             noise = pnoise2((i + (offX))*mult, (j + (offY))*mult)
             val = (noise+1)*50
@@ -143,9 +143,7 @@ def renderLand():
 
 class GUI(): # Draws GUI, Very simple right now
     def Render():
-        pygame.draw.rect(screen, (100,100,100), (1000,0, 300, 1000))
-        pygame.draw.rect(screen, (150,150,150), (1000,0, 10, 1000))
-        player.PrintResource()
+        pygame.draw.rect(screen, (100,100,100), (0, 0, 1280, 40))
 
     def RightClick():
         clicked = True
@@ -201,7 +199,6 @@ def placeBuilding():
 
 def OnScreenRender():
     screen.fill((0,0,0))
-    GUI.Render()
     #Init Mouse Location
     mouseX, mouseY = pygame.mouse.get_pos()
     X = int(mouseX/10)
@@ -228,6 +225,7 @@ def OnScreenRender():
     screen.blit(landImg,(0,0))
     clock.tick(60)
     screen.blit(SelectImage,(X *10,Y *10))
+    GUI.Render()
 
     ################## SIDE BAR STUFF #############################
     posText = font.render('['+str(X)+','+str(Y)+']',True,(255,255,255))
