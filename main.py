@@ -35,13 +35,10 @@ inventory = [100,100,100,0,0,0]
 focusX = 0
 focusY = 0
 
-
-
-
 land = []
 oreGEN = []
 
-gridSize = 0
+showGrid = True
 
 # Constants
 WATER = 0
@@ -53,12 +50,12 @@ MOUNTAIN = 4
 COLORS = [(46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
 LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
 
-SelectImage = pygame.image.load("img/Selection.png")
+SelectImage = pygame.image.load("img/Cursor2.png")
 landImg = pygame.image.load("img/Selection.png")
 # Helper functions
 def createImage():
     global landImg
-    img = Image.new('RGB', (1000, 720), "black")
+    img = Image.new('RGB', (1000, 720), (0, 0, 0))
     pixels = img.load()
     '''
     for i in range(100):
@@ -75,7 +72,8 @@ def createImage():
         for j in range(720):
             noise = pnoise2((i + (offX))*mult, (j + (offY))*mult)
             val = (noise+1)*50
-            pixels[i,j] = COLORS[getNoiseType(val)]
+            if not showGrid or (i % 10 != 0 and j % 10 != 0):
+                pixels[i,j] = COLORS[getNoiseType(val)]
     img.save("img/Land.png", "PNG")
     landImg = pygame.image.load("img/Land.png")
 
