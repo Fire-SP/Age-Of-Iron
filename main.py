@@ -9,6 +9,10 @@ done = False
 
 
 # Important Variables
+offX = randint(-5000000, 5000000)
+offY = randint(-5000000, 5000000)
+#offX = 5
+#offY = 0
 winWidth = 1280
 winHeight = 720
 clock = pygame.time.Clock()
@@ -56,7 +60,7 @@ def createImage():
     global landImg
     img = Image.new('RGB', (1000, 1000), "black")
     pixels = img.load()
-
+    '''
     for i in range(100):
         for j in range(72):
             landIndex = doubleToSingle(i, j)
@@ -65,6 +69,13 @@ def createImage():
                     pixels[i*10+k, j*10+l] = land[landIndex].color
             #pixels[i*10,j*10] = land[landIndex].color
         # pixels[imgX,imgY] = land[landIndex].color
+    '''
+    mult = 0.006
+    for i in range(1000):
+        for j in range(720):
+            noise = pnoise2((i + (offX))*mult, (j + (offY))*mult)
+            val = (noise+1)*50
+            pixels[i,j] = COLORS[getNoiseType(val)]
     img.save("img/Land.png", "PNG")
     landImg = pygame.image.load("img/Land.png")
 
@@ -87,12 +98,23 @@ class Tile():
         self.hasTin = False
         self.hasIron = False
 
+def getNoiseType(noiseVal):
+    if noiseVal > 80:
+        TYPE = MOUNTAIN
+    elif noiseVal > 60:
+        TYPE = FOREST
+    elif noiseVal > 40:
+        TYPE = GRASS
+    elif noiseVal > 35:
+        TYPE = SAND
+    else:
+        TYPE = WATER
+    return TYPE
+
 def init():
     # Init the land
     mult = 0.06
     oremult = 0.5
-    offX = randint(-5000000, 5000000)
-    offY = randint(-5000000, 5000000)
     CopperX = randint(0, 5000)
     CopperY = randint(0, 5000)
     TinX = randint(0, 5000)
@@ -101,23 +123,13 @@ def init():
     IronY = randint(0, 5000)
     for i in range(MaxX*MaxY):
         X, Y = singleToDouble(i)
-        noise = pnoise2((X + offX)*mult, (Y + offY)*mult)
+        noise = pnoise2((X + (offX/10.0))*mult, (Y + (offY/10.0))*mult)
         Coppernoise = (pnoise2((X +CopperX)*oremult,(Y + CopperY)* oremult)+1) * 5
         Tinnoise = (pnoise2((X +TinX)*oremult,(Y + TinY)* oremult)+ 1) * 3
         Ironnoise = (pnoise2((X +IronX)*oremult,(Y + IronY)* oremult)+1) * 1.5
         val = (noise+1)*50
-        TYPE = 0
 
-        if val > 80:
-            TYPE = MOUNTAIN
-        elif val > 60:
-            TYPE = FOREST
-        elif val > 40:
-            TYPE = GRASS
-        elif val > 35:
-            TYPE = SAND
-        else:
-            TYPE = WATER
+        TYPE = getNoiseType(val)
 
         land.append(Tile(TYPE))
         oreGEN.append((Coppernoise, Tinnoise, Ironnoise))
