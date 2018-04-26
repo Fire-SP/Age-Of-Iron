@@ -58,7 +58,7 @@ landImg = pygame.image.load("img/Selection.png")
 # Helper functions
 def createImage():
     global landImg
-    img = Image.new('RGB', (1000, 1000), "black")
+    img = Image.new('RGB', (1000, 720), "black")
     pixels = img.load()
     '''
     for i in range(100):
@@ -237,7 +237,7 @@ def OnScreenRender():
 
     # Show land type
     landIndex = doubleToSingle(X, Y)
-    landType = font.render(land[landIndex].label, True, (255, 255, 255))
+    landType = pygame.image.load("img/tiles/" + land[landIndex].label + ".png")
     screen.blit(landType, (1100, 200))
 
 init()
