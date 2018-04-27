@@ -18,6 +18,7 @@ winHeight = 720
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((winWidth, winHeight))
 font = pygame.font.SysFont('Times New Roman MS',30)
+# test = pygame.image.load("IMAGE.png")
 
 global mult
 MaxX = 130 # Max X
@@ -53,15 +54,11 @@ GRASS = 2
 FOREST = 3
 MOUNTAIN = 4
 
-COLORS = [(46, 164, 223), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
+COLORS = [(0, 119, 190), (180,160,140), (82, 127, 25), (53, 76, 25), (230, 230, 230)]
 LABELS = ["Water", "Sand", "Grass", "Forest", "Mountain"]
 
-SelectImage = pygame.image.load("img/Cursor2.png")
+SelectImage = pygame.image.load("img/Selection.png")
 landImg = pygame.image.load("img/Selection.png")
-WoodIcon = pygame.image.load("img/WoodIcon.png")
-StoneIcon = pygame.image.load("img/StoneIcon.png")
-FoodIcon = pygame.image.load("img/FoodIcon.png")
-MetalIcon = pygame.image.load("img/MetalIcon.png")
 
 # Resources
 
@@ -157,17 +154,17 @@ def renderLand():
 class GUI(): # Draws GUI, Very simple right now
     def Render():
         pygame.draw.rect(screen, (100,100,100), (0, 0, 1280, 40))
-        woodText = font.render( str(wood),True,(255,255,255))
-        stoneText = font.render(str(stone),True,(255,255,255))
-        foodText = font.render(str(food),True,(255,255,255))
-        metalText = font.render(str(metal),True,(255,255,255))
+        woodText = font.render('Wood: ' + str(wood),True,(255,255,255))
+        stoneText = font.render('Stone: ' + str(stone),True,(255,255,255))
+        foodText = font.render('Food: ' + str(food),True,(255,255,255))
+        metalText = font.render('Metal: ' + str(metal),True,(255,255,255))
         popText = font.render('Population: ' + str(pop),True,(255,255,255))
         goldText = font.render('Gold: ' + str(gold),True,(255,255,255))
 
-        screen.blit(woodText, (60, 12))
-        screen.blit(stoneText, (150, 12))
-        screen.blit(foodText, (240, 12))
-        screen.blit(metalText, (340, 12))
+        screen.blit(woodText, (20, 12))
+        screen.blit(stoneText, (200, 12))
+        screen.blit(foodText, (400, 12))
+        screen.blit(metalText, (600, 12))
         screen.blit(popText, (800, 12))
         screen.blit(goldText, (1000, 12))
 
@@ -222,10 +219,7 @@ def OnScreenRender():
     clock.tick(60)
     screen.blit(SelectImage,(X *10,Y *10))
     GUI.Render()
-    screen.blit(WoodIcon,(30,4))
-    screen.blit(StoneIcon,(120,4))
-    screen.blit(FoodIcon,(210,4))
-    screen.blit(MetalIcon,(300,4))
+
     ################## SIDE BAR STUFF #############################
     posText = font.render('['+str(X)+','+str(Y)+']',True,(255,255,255))
     screen.blit(posText,(1200,10))
