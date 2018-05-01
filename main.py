@@ -176,9 +176,42 @@ class GUI(): # Draws GUI, Very simple right now
         mouseX, mouseY = pygame.mouse.get_pos()
         OldX = mouseX
         OldY = mouseY
+        X = int(mouseX)
+        Y = int(mouseY)
         while clicked == True:
+            """
+            Castle - 4x4
+            Farm - 2x2
+            Outpost = 3x3
+            House - 2x2
+            Mine = 2x2
+            Woodcutter's Camp- 2x2
+            Fishing Camp - 2x2
+            """
+            castleText = font.render("Castle",True,(255,255,255))
+            farmText = font.render("Farm",True,(255,255,255))
+            outpostText = font.render("Outpost",True,(255,255,255))
+            houseText = font.render("House",True,(255,255,255))
+            mineText = font.render("Mine",True,(255,255,255))
+            woodText = font.render("Wood",True,(255,255,255))
+            fishText = font.render("Fish",True,(255,255,255))
+
             OnScreenRender()
-            pygame.draw.rect(screen,(100,100,100),(int(OldX),int(OldY),150,300))
+            pygame.draw.rect(screen,(100,100,100),(int(OldX),int(OldY),150,280))
+            screen.blit(castleText, (X + 10, Y + 10))
+            screen.blit(farmText, (X + 10, Y + 50))
+            screen.blit(outpostText, (X + 10, Y + 90))
+            screen.blit(houseText, (X + 10, Y + 130))
+            screen.blit(mineText, (X + 10, Y + 170))
+            screen.blit(woodText, (X + 10, Y + 210))
+            screen.blit(fishText, (X + 10, Y + 250))
+
+            for i in range(8):
+                pygame.draw.rect(screen, (0, 0, 0), (X, Y + (40*i), 150, 2))
+
+            pygame.draw.rect(screen, (0, 0, 0), (X, Y, 2, 280))
+            pygame.draw.rect(screen, (0, 0, 0), (X+150, Y, 2, 280))
+
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -200,14 +233,12 @@ def OnScreenRender():
     X = int(mouseX/10)
     Y = int(mouseY/10)
 
-    #print(oreGEN[mouseX + mouseY])
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
             pygame.quit()
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print (event.button)
             if event.button == 3:
                 global clicked
                 clicked = True
