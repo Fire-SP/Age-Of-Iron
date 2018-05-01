@@ -178,6 +178,8 @@ class GUI(): # Draws GUI, Very simple right now
         OldY = mouseY
         X = int(mouseX)
         Y = int(mouseY)
+        focusX = int(mouseX/10)
+        focusY = int(mouseY/10)
         while clicked == True:
             """
             Castle - 4x4
@@ -211,6 +213,7 @@ class GUI(): # Draws GUI, Very simple right now
 
             pygame.draw.rect(screen, (0, 0, 0), (X, Y, 2, 280))
             pygame.draw.rect(screen, (0, 0, 0), (X+150, Y, 2, 280))
+            pygame.draw.rect(screen, (255, 0, 0), (focusX*10, focusY*10, 10, 10))
 
             pygame.display.update()
 
