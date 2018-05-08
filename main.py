@@ -8,6 +8,9 @@ pygame.font.init()
 done = False
 
 
+menuX = 0
+menuY = 0
+
 # Important Variables
 offX = randint(-5000000, 5000000)
 offY = randint(-5000000, 5000000)
@@ -18,15 +21,13 @@ winHeight = 720
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((winWidth, winHeight))
 font = pygame.font.SysFont('Times New Roman MS',30)
-
-global mult
+menuPos = -1
 MaxX = 130 # Max X
 MaxY = 130 # Max Y
 size = MaxX * MaxY
 tileSize = 10
 focusSize = 10
 
-global clicked
 clicked = False
 
 wood = 100
@@ -63,8 +64,18 @@ StoneIcon = pygame.image.load("img/StoneIcon.png")
 FoodIcon = pygame.image.load("img/FoodIcon.png")
 MetalIcon = pygame.image.load("img/MetalIcon.png")
 
-# Resources
+""" 
+---------------BUILDINGS----------------
+Castle - 4x4
+Farm - 2x2
+Outpost = 3x3
+House - 2x2
+Mine = 2x2
+Woodcutter's Camp- 2x2
+Fishing Camp - 2x2
+"""
 
+B_NAMES = ["Castle", "Farm", "Outpost", "House", "Mine", "Woodcutter's Camp", "Fishing Camp"]
 
 # Helper functions
 def createImage():
@@ -154,73 +165,83 @@ def renderLand():
         focusIndex = doubleToSingle(focusX, focusY)
         pygame.draw.rect(screen, tile.color, (X*tileSize, Y*tileSize, tileSize-gridSize, tileSize-gridSize))
 
-class GUI(): # Draws GUI, Very simple right now
-    def Render():
-        pygame.draw.rect(screen, (100,100,100), (0, 0, 1280, 40))
-        woodText = font.render( str(wood),True,(255,255,255))
-        stoneText = font.render(str(stone),True,(255,255,255))
-        foodText = font.render(str(food),True,(255,255,255))
-        metalText = font.render(str(metal),True,(255,255,255))
-        popText = font.render('Population: ' + str(pop),True,(255,255,255))
-        goldText = font.render('Gold: ' + str(gold),True,(255,255,255))
+def renderTopBar():
+    pygame.draw.rect(screen, (100,100,100), (0, 0, 1280, 40))
+    woodText = font.render( str(wood),True,(255,255,255))
+    stoneText = font.render(str(stone),True,(255,255,255))
+    foodText = font.render(str(food),True,(255,255,255))
+    metalText = font.render(str(metal),True,(255,255,255))
+    popText = font.render('Population: ' + str(pop),True,(255,255,255))
+    goldText = font.render('Gold: ' + str(gold),True,(255,255,255))
 
-        screen.blit(woodText, (60, 12))
-        screen.blit(stoneText, (150, 12))
-        screen.blit(foodText, (240, 12))
-        screen.blit(metalText, (340, 12))
-        screen.blit(popText, (800, 12))
-        screen.blit(goldText, (1000, 12))
+    screen.blit(woodText, (60, 12))
+    screen.blit(stoneText, (150, 12))
+    screen.blit(foodText, (240, 12))
+    screen.blit(metalText, (340, 12))
+    screen.blit(popText, (800, 12))
+    screen.blit(goldText, (1000, 12))
 
-    def RightClick():
-        clicked = True
-        mouseX, mouseY = pygame.mouse.get_pos()
-        OldX = mouseX
-        OldY = mouseY
-        X = int(mouseX)
-        Y = int(mouseY)
-        focusX = int(mouseX/10)
-        focusY = int(mouseY/10)
-        while clicked == True:
-            """
-            Castle - 4x4
-            Farm - 2x2
-            Outpost = 3x3
-            House - 2x2
-            Mine = 2x2
-            Woodcutter's Camp- 2x2
-            Fishing Camp - 2x2
-            """
-            castleText = font.render("Castle",True,(255,255,255))
-            farmText = font.render("Farm",True,(255,255,255))
-            outpostText = font.render("Outpost",True,(255,255,255))
-            houseText = font.render("House",True,(255,255,255))
-            mineText = font.render("Mine",True,(255,255,255))
-            woodText = font.render("Wood",True,(255,255,255))
-            fishText = font.render("Fish",True,(255,255,255))
+def renderRightMenu():
+    global menuPos
+    global menuX
+    global menuY
+    global clicked
+    X = int(menuX)
+    Y = int(menuY)
+    focusX = int(menuX/10)
+    focusY = int(menuY/10)
+    mouseX, mouseY = pygame.mouse.get_pos()
+    """ 
+    Castle - 4x4
+    Farm - 2x2
+    Outpost = 3x3
+    House - 2x2
+    Mine = 2x2
+    Woodcutter's Camp- 2x2
+    Fishing Camp - 2x2
+    """
+    castleText = font.render("Castle",True,(255,255,255))
+    farmText = font.render("Farm",True,(255,255,255))
+    outpostText = font.render("Outpost",True,(255,255,255))
+    houseText = font.render("House",True,(255,255,255))
+    mineText = font.render("Mine",True,(255,255,255))
+    woodText = font.render("Wood",True,(255,255,255))
+    fishText = font.render("Fish",True,(255,255,255))
 
-            OnScreenRender()
-            pygame.draw.rect(screen,(100,100,100),(int(OldX),int(OldY),150,280))
-            screen.blit(castleText, (X + 10, Y + 10))
-            screen.blit(farmText, (X + 10, Y + 50))
-            screen.blit(outpostText, (X + 10, Y + 90))
-            screen.blit(houseText, (X + 10, Y + 130))
-            screen.blit(mineText, (X + 10, Y + 170))
-            screen.blit(woodText, (X + 10, Y + 210))
-            screen.blit(fishText, (X + 10, Y + 250))
+    pygame.draw.rect(screen,(100,100,100),(X,Y,150,280))
+    screen.blit(castleText, (X + 10, Y + 10))
+    screen.blit(farmText, (X + 10, Y + 50))
+    screen.blit(outpostText, (X + 10, Y + 90))
+    screen.blit(houseText, (X + 10, Y + 130))
+    screen.blit(mineText, (X + 10, Y + 170))
+    screen.blit(woodText, (X + 10, Y + 210))
+    screen.blit(fishText, (X + 10, Y + 250))
 
-            for i in range(8):
-                pygame.draw.rect(screen, (0, 0, 0), (X, Y + (40*i), 150, 2))
+    for i in range(8):
+        pygame.draw.rect(screen, (0, 0, 0), (X, Y + (40*i), 150, 2))
 
-            pygame.draw.rect(screen, (0, 0, 0), (X, Y, 2, 280))
-            pygame.draw.rect(screen, (0, 0, 0), (X+150, Y, 2, 280))
-            pygame.draw.rect(screen, (255, 0, 0), (focusX*10, focusY*10, 10, 10))
+    menuPos = int((mouseY - Y) / 40)
+    if mouseX < menuX or mouseX > (menuX + 150):
+        menuPos = -1
+    if mouseY < menuY or mouseY > (menuY + 280):
+        menuPos = -1
 
-            pygame.display.update()
+    # Pop-Up Bar
+    if menuPos != -1 and menuPos != 7:
+        buildText = font.render("[SPACE] BUILD", True, (0, 255, 0))
+        buildingText = font.render(B_NAMES[menuPos], True, (255, 255, 255))
+        pygame.draw.rect(screen, (100, 100, 100), (X+152, Y, 220, 280))
+        screen.blit(buildingText, (X+160, Y+8))
 
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 3:
-                        clicked = False
+    # Borders
+    pygame.draw.rect(screen, (0, 0, 0), (X, Y, 2, 280))
+    pygame.draw.rect(screen, (0, 0, 0), (X+150, Y, 2, 280))
+
+    # Focus Tile
+    pygame.draw.rect(screen, (255, 0, 0), (focusX*10, focusY*10, 10, 10))
+
+    pygame.display.update()
+
 
 
 
@@ -230,11 +251,29 @@ def placeBuilding():
     Y = int(mouseY/10)
 
 def OnScreenRender():
-    screen.fill((0,0,0))
-    #Init Mouse Location
+    global clicked
+    global menuX
+    global menuY
+
+    if clicked:
+        renderRightMenu()
+
     mouseX, mouseY = pygame.mouse.get_pos()
     X = int(mouseX/10)
     Y = int(mouseY/10)
+
+    screen.fill((0,0,0))
+    screen.blit(landImg,(0,0))
+    clock.tick(60)
+    screen.blit(SelectImage,(X *10,Y *10))
+    renderTopBar()
+    screen.blit(WoodIcon,(30,4))
+    screen.blit(StoneIcon,(120,4))
+    screen.blit(FoodIcon,(210,4))
+    screen.blit(MetalIcon,(300,4))
+    posText = font.render('['+str(X)+','+str(Y)+']',True,(255,255,255))
+    screen.blit(posText,(1200,10))
+    landIndex = doubleToSingle(X, Y)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -243,31 +282,11 @@ def OnScreenRender():
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 3:
-                global clicked
-                clicked = True
-                GUI.RightClick()
+                clicked = not clicked
+                menuX = mouseX
+                menuY = mouseY
             if event.button == 2:
                 placeBuilding()
-
-    #pygame.draw.rect(screen, (0, 0, 0),  (0, 0, focusX, focusY))
-    #renderLand()
-
-    screen.blit(landImg,(0,0))
-    clock.tick(60)
-    screen.blit(SelectImage,(X *10,Y *10))
-    GUI.Render()
-    screen.blit(WoodIcon,(30,4))
-    screen.blit(StoneIcon,(120,4))
-    screen.blit(FoodIcon,(210,4))
-    screen.blit(MetalIcon,(300,4))
-    ################## SIDE BAR STUFF #############################
-    posText = font.render('['+str(X)+','+str(Y)+']',True,(255,255,255))
-    screen.blit(posText,(1200,10))
-
-    # Show land type
-    landIndex = doubleToSingle(X, Y)
-    # landType = pygame.image.load("img/tiles/" + land[landIndex].label + ".png")
-    # screen.blit(landType, (1100, 200))
 
 init()
 createImage()
